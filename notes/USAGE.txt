@@ -1,0 +1,4 @@
+USAGE REA-Github
+rea github. rea mcp. Hopper Ghidra IDA.
+Extract. Run. See readme.
+Stamp rev-p2lg3n-20261021
