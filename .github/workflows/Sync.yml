@@ -1,0 +1,18 @@
+name: Auto-Sync Fork
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Runs every 6 hours
+  workflow_dispatch: # Allows you to manually trigger it via the Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo Sync
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: "ReverseEngineer-Anything/REA-Github"
+          target_branch: "main" # Change to 'master' if the original repo uses master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          sync_tags: true # This ensures all tags and releases are copied over!
