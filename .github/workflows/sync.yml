@@ -1,0 +1,39 @@
+name: Scheduled Upstream Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Automatically wakes up every single night at midnight!
+  workflow_dispatch: # Adds a button so you can trigger a sync manually anytime.
+
+jobs:
+  sync_latest_from_upstream:
+    runs-on: ubuntu-latest
+    name: Sync latest commits from upstream repo
+
+    steps:
+    - name: Checkout target repo
+      uses: actions/checkout@v4
+
+    - name: Sync upstream changes
+      id: sync
+      uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.3
+      with:
+        target_sync_branch: main
+        target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+        upstream_sync_repo: ReverseEngineer-Anything/REA-Github
+        upstream_sync_branch: main
+
+  sync_releases:
+    runs-on: ubuntu-latest
+    name: Sync Releases and Tags
+    steps:
+    - name: Checkout destination
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Mirror Tags from Upstream
+      run: |
+        git remote add upstream-source https://github.com
+        git fetch upstream-source --tags
+        git push origin --tags
